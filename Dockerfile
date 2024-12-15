@@ -83,9 +83,8 @@ RUN    export NGINX_VERSION=1.27.3 \
     && echo " Cleaning after installation" \
     && echo "###############################################" \
     && sleep 4 \
-    && apt-get clean
-
-RUN    echo "###############################################" \
+    && apt-get clean \
+    && echo "###############################################" \
     && echo " Loading BoringSSL" \
     && echo "###############################################" \
     && sleep 4 \
