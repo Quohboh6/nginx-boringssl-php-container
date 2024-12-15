@@ -11,6 +11,10 @@ This approach avoids using the deprecated --with-openssl= parameter, providing g
 
 Additionally, the current placement of the process for changing the UID and GID of the www-data user is not optimal and may lead to issues with file permissions. In the future, this part will be moved higher to prevent problems with lost files if the distribution includes something belonging to the user with UID 33.
 
+The image is created for testing and further production use, so it will be modified for optimization purposes. In future versions, some Nginx modules will be removed from the build to improve performance and reduce the container size.
+
+The version of Ubuntu and Nginx matters. For example, in the previous version of Ubuntu (22.04), it was not necessary to install the adduser package to modify the GID and UID of the www-data user. However, in the current version (24.04), this package needs to be installed to properly change the user and group IDs. This is due to changes in the package and the system as a whole.
+
 Additional materials:
 
 https://forum.nginx.org/read.php?11,297680
