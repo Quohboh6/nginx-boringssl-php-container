@@ -4,7 +4,7 @@
 service cron start
 
 # PHP-FPM start
-php-fpm{{PHP_MAJOR_MINOR}} &
+php-fpm &
 
 # Nginx start
 nginx -g 'daemon off;'
