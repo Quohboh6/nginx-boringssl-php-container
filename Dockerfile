@@ -215,34 +215,21 @@ RUN    export NGINX_VERSION=1.27.3 \
     && echo " Cleaning" \
     && echo "###############################################" \
     && sleep 4 \
-    && rm -rf /usr/src/boringssl \
-    && rm -rf /usr/src/nginx-${NGINX_VERSION} \
     && rm /usr/src/nginx-${NGINX_VERSION}.tar.gz \
     && rm -rf /var/lib/apt/lists/*
     
-#    && echo "###############################################" \
-#    && echo " Generating Nginx base files" \
-#    && echo "###############################################" \
-#    && echo "<?php phpinfo(); ?>" > /var/www/html/index.php
-
-#COPY nginx.conf /etc/nginx/nginx.conf
-#RUN chown www-data:www-data /etc/nginx/nginx.conf
-
 COPY update_cloudflare_ips.sh /usr/local/bin/update_cloudflare_ips.sh
-RUN chmod +x /usr/local/bin/update_cloudflare_ips.sh
-
-COPY update_cloudflare_ips.cron /etc/cron.d/update_cloudflare_ips
-RUN chmod 0644 /etc/cron.d/update_cloudflare_ips && crontab /etc/cron.d/update_cloudflare_ips
-
-COPY start.sh.template /start.sh.template
-RUN    export PHP_MAJOR_MINOR=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;") \
-    && echo "###############################################" \
-    && echo " Generating start.sh for PHP version ${PHP_MAJOR_MINOR}" \
-    && echo "###############################################" \
-    && sleep 2 \
-    && sed "s/{{PHP_MAJOR_MINOR}}/${PHP_MAJOR_MINOR}/g" /start.sh.template > /start.sh \
-    && chmod +x /start.sh
+RUN  chmod +x /usr/local/bin/update_cloudflare_ips.sh
     
+COPY update_cloudflare_ips.cron /etc/cron.d/update_cloudflare_ips
+RUN  chmod 0644 /etc/cron.d/update_cloudflare_ips && crontab /etc/cron.d/update_cloudflare_ips
+
+COPY start.sh /start.sh
+RUN  chmod +x /start.sh
+
 RUN touch /etc/nginx/cloudflare_ip_range
 
+ENV PATH="/usr/local/boringssl/bin:$PATH"
+    
 ENTRYPOINT ["/start.sh"]
+
